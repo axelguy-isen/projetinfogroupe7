@@ -4,6 +4,7 @@ import db from './db/database';
 const Commentaire = ({ parcId, jardinId }) => {
   const [utilisateur, setUtilisateur] = useState('');
   const [message, setMessage] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [imageUri, setImageUri] = useState('');
   const [comments, setComments] = useState([]);
 
@@ -27,20 +28,20 @@ const Commentaire = ({ parcId, jardinId }) => {
     });
   };
 
-  const handleImageChange = () => {
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.file) {
-      // Utilisez le plugin Cordova pour sélectionner une image
-      window.cordova.plugins.file.openPicker(
-        (imageUri) => {
-          setImageUri(imageUri);
-        },
-        (error) => {
-          console.error('Erreur lors de la sélection de l\'image :', error);
-        },
-        { type: 'image/*' }
-      );
-    } else {
-      console.warn('Le plugin Cordova File n\'est pas disponible. La sélection d\'image ne fonctionnera pas dans cet environnement.');
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      window.resolveLocalFileSystemURL(file, function(fileEntry) {
+        fileEntry.file(function(file) {
+          const reader = new FileReader();
+          reader.onloadend = function() {
+            const imageUri = this.result;
+            setImageFile(file);
+            setImageUri(imageUri);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
     }
   };
 
@@ -65,6 +66,7 @@ const Commentaire = ({ parcId, jardinId }) => {
       } else {
         setUtilisateur('');
         setMessage('');
+        setImageFile(null);
         setImageUri('');
         loadComments();
       }
@@ -78,6 +80,7 @@ const Commentaire = ({ parcId, jardinId }) => {
         <input type="text" value={utilisateur} onChange={(e) => setUtilisateur(e.target.value)} placeholder="Utilisateur" />
         <textarea value={message} onChange={handleCommentChange} placeholder="Message" />
         <input type="file" accept="image/*" onChange={handleImageChange} />
+        {imageUri && <img src={imageUri} alt="Selected Image" />}
         <button type="submit">Ajouter</button>
       </form>
 

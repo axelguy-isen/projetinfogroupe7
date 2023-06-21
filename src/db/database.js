@@ -25,7 +25,7 @@ function openDatabase() {
 function addComment(comment, callback) {
   const transaction = db.transaction('commentaire', 'readwrite');
   const store = transaction.objectStore('commentaire');
-  
+
   const request = store.add(comment);
 
   request.onerror = function(event) {
