@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.exemple.id" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>App</name>
+    <description>Sample Apache Cordova App</description>
+    <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="http://localhost:8002/*" />
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        <string>La raison pour laquelle l'application accède à la localisation de l'utilisateur en cours d'utilisation.</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
+        <string>La raison pour laquelle l'application demande un accès à la localisation de l'utilisateur en tout temps.</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysUsageDescription">
+        <string>La raison pour laquelle l'application demande un accès à la localisation de l'utilisateur en tout temps.</string>
+    </edit-config>
+    <preference name="ShowAllResources" value="true" />
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="Scheme" value="app" />
+    <preference name="Hostname" value="localhost" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidLaunchMode" value="singleTask" />
+</widget>

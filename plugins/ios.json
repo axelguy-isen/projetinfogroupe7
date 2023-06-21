@@ -1,0 +1,19 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-geolocation": {
+      "GPS_REQUIRED": "true",
+      "PACKAGE_NAME": "com.exemple.id"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.exemple.id"
+    }
+  },
+  "dependent_plugins": {}
+}

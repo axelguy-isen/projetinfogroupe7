@@ -11,3 +11,125 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.header {
+  background-color: #f8f8f8;
+  padding: 20px;
+}
+
+.navbar-brand {
+  color: #333;
+  font-weight: bold;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  color: #555;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; /* Empêche le retour à la ligne */
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.nav-link:hover {
+  color: #555;
+}
+
+.container2 {
+  padding: 15px;
+  background-color: #f8f9fa;
+}
+
+.highlight-box {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.image-resize {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.carousel {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center; /* Centrer les carrousels horizontalement */
+  flex-wrap: wrap; /* Permet aux carrousels d'être côte à côte */
+}
+
+.slide {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1; /* Permet aux carrousels d'occuper le même espace */
+}
+
+.review {
+  margin-bottom: 10px;
+  text-align: center; /* Centrer le contenu des carrousels */
+}
+
+.rating {
+  color: #f0ad4e;
+}
+
+.review h2 {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}
