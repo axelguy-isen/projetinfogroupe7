@@ -20,8 +20,11 @@ const ParcDetails = () => {
             description: parcRecord.fields.description,
             id: parcRecord.fields.id,
             openingHoursSummer: parcRecord.fields.horaires_ouverture_ete,
-            openingHoursWinter: parcRecord.fields.horaires_ouverture_hiver
+            openingHoursWinter: parcRecord.fields.horaires_ouverture_hiver,
+            accesmetro: parcRecord.fields.acces_metro,
+            adresse: parcRecord.fields.adresse
           };
+
           setParcDetails(parcDetails);
 
           fetch(`https://fr.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(parcDetails.name)}`)
@@ -44,7 +47,6 @@ const ParcDetails = () => {
         console.error(error);
       });
 
-    // Récupérer les commentaires spécifiques au parc
     db.getComments((error, comments) => {
       if (error) {
         console.error('Erreur lors de la récupération des commentaires :', error);
@@ -60,22 +62,35 @@ const ParcDetails = () => {
     return <div>Loading...</div>;
   }
 
-  const openingHoursSummerText = parcDetails.openingHoursSummer ? parcDetails.openingHoursSummer : "Ouverture permanente";
-  const openingHoursWinterText = parcDetails.openingHoursWinter ? parcDetails.openingHoursWinter : "Ouverture permanente";
+  // Condition pour afficher l'ouverture permanente une seule fois
+  let openingHoursSummerText = parcDetails.openingHoursSummer ? parcDetails.openingHoursSummer : "Ouverture permanente";
+  let openingHoursWinterText = parcDetails.openingHoursWinter ? parcDetails.openingHoursWinter : "Ouverture permanente";
+
+  if (openingHoursSummerText === "Ouverture permanente" && openingHoursWinterText === "Ouverture permanente") {
+    openingHoursSummerText = "Ouverture permanente";
+    openingHoursWinterText = "";
+  }
+
+  const imageFileName = `${parcDetails.id}.jpg`;
+  const imagePath = `/images/${imageFileName}`;
 
   return (
     <div>
       <Header />
       <div>
         <h1>{parcDetails.name}</h1>
-        <p>{parcDetails.description}</p>
-        <p>Horaires d'ouverture : {openingHoursSummerText} ou {openingHoursWinterText}</p>
         <img
+          src={process.env.PUBLIC_URL + imagePath}
           alt={parcDetails.name}
           className="parc-image"
         />
+        <div className="parc-information">
+          <p>{parcDetails.description}</p>
+          <p>Horaires d'ouverture : {openingHoursSummerText} {openingHoursWinterText}</p>
+          <p>{parcDetails.name} est à l'adresse : {parcDetails.adresse}</p>
+          <p>Les accés métro : {parcDetails.accesmetro}</p>
+        </div>
 
-        {/* Ajouter le composant Commentaire */}
         <Commentaire parcId={id} comments={comments} />
       </div>
     </div>

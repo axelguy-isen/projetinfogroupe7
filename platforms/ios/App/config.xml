@@ -39,7 +39,7 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <allow-navigation href="http://localhost:8002/*" />
+    <allow-navigation href="*" />
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>La raison pour laquelle l'application accède à la localisation de l'utilisateur en cours d'utilisation.</string>
     </edit-config>

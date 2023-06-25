@@ -20,7 +20,9 @@ const JardinDetails = () => {
             description: jardinRecord.fields.description,
             id: jardinRecord.fields.id,
             openingHoursSummer: jardinRecord.fields.horaires_ouverture_ete,
-            openingHoursWinter: jardinRecord.fields.horaires_ouverture_hiver
+            openingHoursWinter: jardinRecord.fields.horaires_ouverture_hiver,
+            accesmetro: jardinRecord.fields.acces_metro,
+            adresse: jardinRecord.fields.adresse
           };
           setJardinDetails(jardinDetails);
 
@@ -44,7 +46,6 @@ const JardinDetails = () => {
         console.error(error);
       });
 
-    // Récupérer les commentaires spécifiques au jardin
     db.getComments((error, comments) => {
       if (error) {
         console.error('Erreur lors de la récupération des commentaires :', error);
@@ -60,22 +61,33 @@ const JardinDetails = () => {
     return <div>Loading...</div>;
   }
 
-  const openingHoursSummerText = jardinDetails.openingHoursSummer ? jardinDetails.openingHoursSummer : "Ouverture permanente";
-  const openingHoursWinterText = jardinDetails.openingHoursWinter ? jardinDetails.openingHoursWinter : "Ouverture permanente";
+  let openingHoursSummerText = jardinDetails.openingHoursSummer ? jardinDetails.openingHoursSummer : "Ouverture permanente";
+  let openingHoursWinterText = jardinDetails.openingHoursWinter ? jardinDetails.openingHoursWinter : "Ouverture permanente";
+
+  if (openingHoursSummerText === "Ouverture permanente" && openingHoursWinterText === "Ouverture permanente") {
+    openingHoursSummerText = "Ouverture permanente";
+    openingHoursWinterText = "";
+  }
+  const imageFileName = `${jardinDetails.id}.jpg`;
+  const imagePath = `/images/${imageFileName}`;
 
   return (
     <div>
       <Header />
       <div>
-        <h1>{jardinDetails.name}</h1>
-        <p>{jardinDetails.description}</p>
-        <p>Horaires d'ouverture : {openingHoursSummerText} ou {openingHoursWinterText}</p>
-        <img
+      <h1>{jardinDetails.name}</h1>
+      <img
+          src={process.env.PUBLIC_URL + imagePath}
           alt={jardinDetails.name}
-          className="jardin-image"
+          className="parc-image"
         />
+      <div className="parc-information">
+          <p>{jardinDetails.description}</p>
+          <p>Horaires d'ouverture : {openingHoursSummerText} {openingHoursWinterText}</p>
+          <p>{jardinDetails.name} est à l'adresse : {jardinDetails.adresse}</p>
+          <p>Les accés métro : {jardinDetails.accesmetro}</p>
+        </div>
 
-        {/* Ajouter le composant Commentaire */}
         <Commentaire jardinId={id} comments={comments} />
       </div>
     </div>

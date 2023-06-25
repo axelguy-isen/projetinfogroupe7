@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 
-const images = require.context('./images', true);
+const images = require.context('./images', true); // Importation du contexte des images
 
 const Parc = () => {
-  const [parcs, setParcs] = useState([]);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [parcs, setParcs] = useState([]); // État pour stocker les parcs récupérés
+  const [latitude, setLatitude] = useState(null); // État pour stocker la latitude
+  const [longitude, setLongitude] = useState(null); // État pour stocker la longitude
 
   useEffect(() => {
-    document.addEventListener('deviceready', onDeviceReady);
+    document.addEventListener('deviceready', onDeviceReady); // Ajout de l'écouteur d'événement lors du montage du composant
 
     return () => {
-      document.removeEventListener('deviceready', onDeviceReady);
+      document.removeEventListener('deviceready', onDeviceReady); // Suppression de l'écouteur d'événement lors du démontage du composant
     };
   }, []);
 
@@ -21,9 +21,9 @@ const Parc = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setLatitude(latitude);
-        setLongitude(longitude);
-        fetchParcs(latitude, longitude);
+        setLatitude(latitude); // Mise à jour de la latitude
+        setLongitude(longitude); // Mise à jour de la longitude
+        fetchParcs(latitude, longitude); // Appel de la fonction pour récupérer les parcs
       },
       (error) => {
         console.error('Erreur de géolocalisation :', error);
@@ -40,16 +40,18 @@ const Parc = () => {
       .then((data) => {
         const parcRecords = data.records || [];
 
-        const parcList = parcRecords.map((record) => ({
-          id: record.fields.id,
-          name: record.fields.nom,
-          slug: record.fields.slug,
-          coordinates: {
-            latitude: record.fields.latitude,
-            longitude: record.fields.longitude,
-          },
-          imageId: record.fields.image_id, // Ajoutez la propriété imageId correspondant à l'identifiant de l'image
-        }));
+        const parcList = parcRecords
+          .filter((record) => !record.fields.nom.includes('Jardin')) // Filtrer les enregistrements dont le nom ne contient pas "Jardin"
+          .map((record) => ({
+            id: record.fields.id,
+            name: record.fields.nom,
+            slug: record.fields.slug,
+            coordinates: {
+              latitude: record.fields.latitude,
+              longitude: record.fields.longitude,
+            },
+            imageId: record.fields.image_id,
+          }));
 
         // Triez les parcs en fonction de leur distance par rapport à la position actuelle
         const sortedParcs = parcList.sort((parcA, parcB) => {
@@ -65,7 +67,7 @@ const Parc = () => {
           return distanceA - distanceB;
         });
 
-        setParcs(sortedParcs);
+        setParcs(sortedParcs); // Mise à jour de la liste des parcs
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des parcs :', error);
@@ -89,9 +91,7 @@ const Parc = () => {
       <div>
         <h1>Les parcs dans la métropole de Lille :</h1>
         {latitude && longitude ? (
-          <p>
-            Coordonnées GPS : Latitude {latitude}, Longitude {longitude}
-          </p>
+          <p></p>
         ) : (
           <p>En attente de la géolocalisation...</p>
         )}
@@ -100,9 +100,7 @@ const Parc = () => {
             <li key={parc.id}>
               <Link to={`/parc/${parc.id}`}>{parc.name}</Link>
               {parc.coordinates && (
-                <p>
-                  Coordonnées du parc : Latitude {parc.coordinates.latitude}, Longitude {parc.coordinates.longitude}
-                </p>
+                <p></p>
               )}
             </li>
           ))}

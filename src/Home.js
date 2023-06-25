@@ -24,36 +24,6 @@ const Home = () => {
             </p>
             </div>
         </div>
-        <div className="carousel">
-            <div className="slides">
-            <div className="slide">
-                <div className="review">
-                <h2>Titre de l'avis</h2>
-                <div className="rating">
-                    <span className="star"></span>
-                    <span className="star"></span>
-                    <span className="star"></span>
-                    <span className="star"></span>
-                    <span className="star"></span>
-                </div>
-                <p>Contenu de l'avis...</p>
-                </div>
-            </div>
-            <div className="slide">
-                <div className="review">
-                <h2>Titre de l'avis</h2>
-                <div className="rating">
-                    <span className="star"></span>
-                    <span className="star"></span>
-                    <span className="star"></span>
-                    <span className="star"></span>
-                    <span className="star"></span>
-                </div>
-                <p>Contenu de l'avis...</p>
-                </div>
-            </div>
-            </div>
-        </div>
         </div>
     </div>
   );

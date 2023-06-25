@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import db from './db/database';
 
 const Commentaire = ({ parcId, jardinId }) => {
-  const [utilisateur, setUtilisateur] = useState('');
-  const [message, setMessage] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUri, setImageUri] = useState('');
-  const [comments, setComments] = useState([]);
+  const [utilisateur, setUtilisateur] = useState(''); // État pour stocker le nom d'utilisateur saisi
+  const [message, setMessage] = useState(''); // État pour stocker le message saisi
+  const [imageFile, setImageFile] = useState(null); // État pour stocker le fichier d'image sélectionné
+  const [imageUri, setImageUri] = useState(''); // État pour stocker l'URI de l'image convertie en base64
+
+  const [comments, setComments] = useState([]); // État pour stocker les commentaires
 
   useEffect(() => {
-    loadComments();
+    loadComments(); // Charger les commentaires au montage du composant et lorsque l'ID du parc ou du jardin change
   }, [parcId, jardinId]);
 
   const loadComments = () => {
@@ -23,7 +24,7 @@ const Commentaire = ({ parcId, jardinId }) => {
         } else if (jardinId) {
           filteredComments = comments.filter(comment => comment.jardinId === jardinId);
         }
-        setComments(filteredComments);
+        setComments(filteredComments); // Mettre à jour les commentaires filtrés
       }
     });
   };
@@ -31,22 +32,17 @@ const Commentaire = ({ parcId, jardinId }) => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      window.resolveLocalFileSystemURL(file, function(fileEntry) {
-        fileEntry.file(function(file) {
-          const reader = new FileReader();
-          reader.onloadend = function() {
-            const imageUri = this.result;
-            setImageFile(file);
-            setImageUri(imageUri);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
+      setImageFile(file); // Mettre à jour le fichier d'image sélectionné
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUri(reader.result); // Mettre à jour l'URI de l'image convertie en base64
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleCommentChange = (event) => {
-    setMessage(event.target.value);
+    setMessage(event.target.value); // Mettre à jour le message saisi
   };
 
   const handleCommentSubmit = (event) => {
@@ -55,8 +51,8 @@ const Commentaire = ({ parcId, jardinId }) => {
     const newComment = {
       parcId: parcId || null,
       jardinId: jardinId || null,
-      utilisateur: utilisateur,
-      message: message,
+      utilisateur: utilisateur || '',
+      message: message || '',
       imageUri: imageUri || null,
     };
 
@@ -68,9 +64,13 @@ const Commentaire = ({ parcId, jardinId }) => {
         setMessage('');
         setImageFile(null);
         setImageUri('');
-        loadComments();
+        loadComments(); // Recharger les commentaires après l'ajout du nouveau commentaire
       }
     });
+  };
+
+  const renderImage = (imageUri) => {
+    return <img src={imageUri} alt="Selected Image" />;
   };
 
   return (
@@ -80,7 +80,7 @@ const Commentaire = ({ parcId, jardinId }) => {
         <input type="text" value={utilisateur} onChange={(e) => setUtilisateur(e.target.value)} placeholder="Utilisateur" />
         <textarea value={message} onChange={handleCommentChange} placeholder="Message" />
         <input type="file" accept="image/*" onChange={handleImageChange} />
-        {imageUri && <img src={imageUri} alt="Selected Image" />}
+        {imageUri && renderImage(imageUri)}
         <button type="submit">Ajouter</button>
       </form>
 
@@ -89,7 +89,7 @@ const Commentaire = ({ parcId, jardinId }) => {
         {comments.map((comment) => (
           <li key={comment.id}>
             <div>{comment.utilisateur}: {comment.message}</div>
-            {comment.imageUri && <img src={comment.imageUri} alt="Comment Image" />}
+            {comment.imageUri && renderImage(comment.imageUri)}
           </li>
         ))}
       </ul>

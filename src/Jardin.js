@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 
 const Jardin = () => {
-  const [jardins, setJardins] = useState([]);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [jardins, setJardins] = useState([]); // État pour stocker les jardins récupérés
+  const [latitude, setLatitude] = useState(null); // État pour stocker la latitude
+  const [longitude, setLongitude] = useState(null); // État pour stocker la longitude
 
   useEffect(() => {
-    document.addEventListener('deviceready', onDeviceReady);
+    document.addEventListener('deviceready', onDeviceReady); // Ajout de l'écouteur d'événement lors du montage du composant
 
     return () => {
-      document.removeEventListener('deviceready', onDeviceReady);
+      document.removeEventListener('deviceready', onDeviceReady); // Suppression de l'écouteur d'événement lors du démontage du composant
     };
   }, []);
 
@@ -19,9 +19,9 @@ const Jardin = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setLatitude(latitude);
-        setLongitude(longitude);
-        fetchJardins(latitude, longitude);
+        setLatitude(latitude); // Mise à jour de la latitude
+        setLongitude(longitude); // Mise à jour de la longitude
+        fetchJardins(latitude, longitude); // Appel de la fonction pour récupérer les jardins
       },
       (error) => {
         console.error('Erreur de géolocalisation :', error);
@@ -38,15 +38,17 @@ const Jardin = () => {
       .then((data) => {
         const jardinRecords = data.records || [];
 
-        const jardinList = jardinRecords.map((record) => ({
-          id: record.fields.id,
-          name: record.fields.nom,
-          slug: record.fields.slug,
-          coordinates: {
-            latitude: record.fields.latitude,
-            longitude: record.fields.longitude,
-          },
-        }));
+        const jardinList = jardinRecords
+          .filter((record) => !record.fields.nom.includes('Parc')) // Filtrer les enregistrements dont le nom ne contient pas "Parc"
+          .map((record) => ({
+            id: record.fields.id,
+            name: record.fields.nom,
+            slug: record.fields.slug,
+            coordinates: {
+              latitude: record.fields.latitude,
+              longitude: record.fields.longitude,
+            },
+          }));
 
         // Triez les jardins en fonction de leur distance par rapport à la position actuelle
         const sortedJardins = jardinList.sort((jardinA, jardinB) => {
@@ -62,7 +64,7 @@ const Jardin = () => {
           return distanceA - distanceB;
         });
 
-        setJardins(sortedJardins);
+        setJardins(sortedJardins); // Mise à jour de la liste des jardins
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des jardins :', error);
@@ -87,9 +89,7 @@ const Jardin = () => {
       <div>
         <h1>Les jardins dans la métropole de Lille :</h1>
         {latitude && longitude ? (
-          <p>
-            Coordonnées GPS : Latitude {latitude}, Longitude {longitude}
-          </p>
+          <p></p>
         ) : (
           <p>En attente de la géolocalisation...</p>
         )}
@@ -97,9 +97,7 @@ const Jardin = () => {
           {jardins.map((jardin) => (
             <li key={jardin.id}>
               <Link to={`/jardin/${jardin.id}`}>{jardin.name}</Link>
-              <p>
-                Coordonnées du jardin : Latitude {jardin.coordinates.latitude}, Longitude {jardin.coordinates.longitude}
-              </p>
+              <p></p>
             </li>
           ))}
         </ul>
